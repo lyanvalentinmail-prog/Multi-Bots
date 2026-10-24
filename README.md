@@ -53,7 +53,7 @@ export const command = {
 }
 ```
 
-El cargador modular vive en `core/commandHandler.js`. El motor original está completo salvo los 14 comandos y módulos NSFW/+18 eliminados intencionalmente; quedan 201 comandos seguros. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
+El cargador modular vive en `core/commandHandler.js`. El motor original está completo salvo los 14 comandos y módulos NSFW/+18 eliminados intencionalmente; quedan 201 comandos seguros. También se incluyen las 80 adivinanzas originales, el catálogo RPG de 92.919 personajes, OCR, fuentes y scripts de sincronización. Consulta `plugins/whatsapp/pain-bot/UPSTREAM.md` para el inventario de integración. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
 
 ## Seguridad
 

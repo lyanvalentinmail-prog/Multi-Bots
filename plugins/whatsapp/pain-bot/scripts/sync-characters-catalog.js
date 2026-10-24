@@ -24,8 +24,9 @@ const UA =
 const PAGE_SIZE = 20
 const PROGRESS_PATH = path.join(
   process.cwd(),
-  'storage',
-  'databases',
+  'bots',
+  'universal-bot',
+  'database',
   'characters-sync-progress.json'
 )
 

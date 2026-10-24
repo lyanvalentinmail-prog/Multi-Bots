@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url'
 import { estadisticasPorId, estadisticasCombatePorPrecio } from './rarity.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const RUTA_CATALOGO = path.join(process.cwd(), 'storage', 'databases', 'characters-catalog.json')
+const RUTA_CATALOGO = process.env.BOT_CHARACTER_CATALOG_FILE || path.join(process.cwd(), 'bots', 'universal-bot', 'database', 'characters-catalog.json')
 
 function almacenVacio() {
   return { updatedAt: 0, characters: {} }

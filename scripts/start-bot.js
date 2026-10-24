@@ -1,0 +1,1 @@
+import MultiBotManager from '../core/multiBotManager.js'; const id = process.argv[2]; if (!id) throw new Error('Uso: npm run bot -- bot1'); const manager = new MultiBotManager(); process.once('SIGINT', () => manager.stopAll()); await manager.start(id, { force: true })

@@ -1,0 +1,1 @@
+import { EventEmitter } from 'node:events'; export class EventHandler extends EventEmitter { async emitAsync(event, ...args) { for (const listener of this.listeners(event)) await listener(...args) } } export default EventHandler

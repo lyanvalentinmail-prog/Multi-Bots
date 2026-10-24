@@ -1,0 +1,1 @@
+export async function spinner(message, task) { process.stdout.write(`${message}... `); try { const result = await task(); console.log('OK'); return result } catch (error) { console.log('ERROR'); throw error } }

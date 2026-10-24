@@ -25,8 +25,8 @@ global.sessions = 'Sessions'
 global.bot = 'Serbot' 
 global.AFBots = true
 
-global.packname = '𝗣𝗔𝗜𝗡 𝗕𝗢𝗧 𝗠𝗗'
-global.namebot = '𝗣𝗔𝗜𝗡 𝗕𝗢𝗧 𝗠𝗗'
+global.packname = 'UNIVERSAL BOT'
+global.namebot = 'UNIVERSAL BOT'
 global.author = 'Sunkovv'
 global.moneda = 'USD'
 

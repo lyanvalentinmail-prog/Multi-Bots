@@ -44,6 +44,13 @@ const {
 } = await import('@whiskeysockets/baileys')
 
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
+const webRuntime = process.env.MULTIBOT_WEB_RUNTIME === '1'
+const runtimeLoginMethod = process.env.MULTIBOT_LOGIN_METHOD === 'pairing-code' ? 'code' : 'qr'
+const emitRuntimeEvent = (type, value) => {
+  if (!webRuntime) return
+  const event = value === undefined ? { type } : { type, value }
+  process.stdout.write(`MULTIBOT_RUNTIME_EVENT:${JSON.stringify(event)}\n`)
+}
 
 protoType()
 serialize()
@@ -123,11 +130,8 @@ global.loadDatabase = async function loadDatabase() {
     ...(global.db.data || {}),
     alquiler: global.db.data?.alquiler || {},
     alquilerNotify: global.db.data?.alquilerNotify || {},
-    cmd18: global.db.data?.cmd18 || {},
     modoDescargas: normalizeModeMap(global.db.data?.modoDescargas),
     modoIA: normalizeModeMap(global.db.data?.modoIA),
-    modoHot: normalizeModeMap(global.db.data?.modoHot),
-    modoIlegal: normalizeModeMap(global.db.data?.modoIlegal),
     modoHuman: normalizeModeMap(global.db.data?.modoHuman),
     modoSad: normalizeModeMap(global.db.data?.modoSad),
     modoPsico: normalizeModeMap(global.db.data?.modoPsico),
@@ -196,7 +200,7 @@ async function handleLogin() {
     return
   }
 
-  let loginMethod = await question(
+  let loginMethod = webRuntime ? runtimeLoginMethod : await question(
     chalk.green(
       '¿Cómo deseas iniciar sesión?\nEscribe "qr" para escanear el código QR o "code" para usar un código de 8 dígitos:\n'
     )
@@ -205,7 +209,9 @@ async function handleLogin() {
   loginMethod = loginMethod.toLowerCase().trim()
 
   if (loginMethod === 'code') {
-    let phoneNumber = await question(chalk.blue('Ingresa el número de WhatsApp donde estará el bot (incluye código país, ej: 521XXXXXXXXXX):\n'))
+    let phoneNumber = webRuntime
+      ? process.env.MULTIBOT_LOGIN_PHONE || ''
+      : await question(chalk.blue('Ingresa el número de WhatsApp donde estará el bot (incluye código país, ej: 521XXXXXXXXXX):\n'))
     phoneNumber = phoneNumber.replace(/\D/g, '').replace(/^0+/, '')
 
     // México: WhatsApp usa 521. Si ya trae 521, no volver a insertar el 1.
@@ -218,13 +224,24 @@ async function handleLogin() {
     if (typeof conn.requestPairingCode === 'function') {
       try {
         
-        if (conn.ws.readyState === ws.OPEN) {
-          let code = await conn.requestPairingCode(phoneNumber)
-          code = code?.match(/.{1,4}/g)?.join('-') || code
-          console.log(chalk.cyan('Tu código de emparejamiento es:', code))
-        } else {
-          console.log(chalk.red('La conexión no está abierta. Intenta nuevamente.'))
+        if (conn.ws.readyState !== ws.OPEN) {
+          await new Promise((resolve, reject) => {
+            const startedAt = Date.now()
+            const timer = setInterval(() => {
+              if (conn.ws.readyState === ws.OPEN) {
+                clearInterval(timer)
+                resolve()
+              } else if (Date.now() - startedAt >= 20000) {
+                clearInterval(timer)
+                reject(new Error('Tiempo agotado esperando WhatsApp.'))
+              }
+            }, 200)
+          })
         }
+        let code = await conn.requestPairingCode(phoneNumber)
+        code = code?.match(/.{1,4}/g)?.join('-') || code
+        if (webRuntime) emitRuntimeEvent('pairing-code', code)
+        else console.log(chalk.cyan('Tu código de emparejamiento es:', code))
       } catch (e) {
         console.log(chalk.red('Error al solicitar código de emparejamiento:'), e.message || e)
       }
@@ -234,7 +251,9 @@ async function handleLogin() {
   } else {
     console.log(chalk.yellow('Generando código QR, escanéalo con tu WhatsApp...'))
     conn.ev.on('connection.update', ({ qr }) => {
-      if (qr) qrcode.generate(qr, { small: true })
+      if (!qr) return
+      if (webRuntime) emitRuntimeEvent('qr', qr)
+      else qrcode.generate(qr, { small: true })
     })
   }
 }
@@ -272,6 +291,7 @@ async function connectionUpdate(update) {
   if (global.db.data == null) await loadDatabase()
   if (connection === 'open') {
     console.log(chalk.yellow('Conectado correctamente.'))
+    emitRuntimeEvent('connected')
     global.mainBotJid = sock.user?.jid?.split('@')[0] || sock.user?.id?.split('@')[0]
     try {
       const { markBotStart } = await import('./lib/bot-uptime.js')
@@ -297,6 +317,7 @@ async function connectionUpdate(update) {
     process.send('reset')
   }
   if (connection === 'close') {
+    emitRuntimeEvent('disconnected')
     switch (reason) {
       case DisconnectReason.badSession:
         sock.logger.error(`Sesión incorrecta, elimina la carpeta ${global.authFile} y escanea nuevamente.`)
@@ -392,8 +413,23 @@ global.reloadHandler = async function (restartConn) {
   return true
 }
 
-const pluginFolder = join(__dirname, 'plugins')
+const commandFolder = join(__dirname, '../../../commands')
 const pluginFilter = (filename) => /\.js$/.test(filename)
+
+function commandFiles(folder = commandFolder) {
+  const files = []
+  for (const entry of readdirSync(folder, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue
+    const absolute = join(folder, entry.name)
+    if (entry.isDirectory()) files.push(...commandFiles(absolute))
+    else if (pluginFilter(entry.name)) files.push(absolute)
+  }
+  return files
+}
+
+function commandKey(file) {
+  return path.relative(commandFolder, file).split(path.sep).join('/')
+}
 
 function normalizePlugin(plugin) {
   if (typeof plugin === 'function') {
@@ -408,59 +444,39 @@ function normalizePlugin(plugin) {
       disabled: false,
     }
   }
-  if (plugin.command && typeof plugin.command === 'string') {
-    plugin.command = [plugin.command]
-  }
+  if (plugin.command && typeof plugin.command === 'string') plugin.command = [plugin.command]
   return plugin
 }
 
 global.plugins = {}
 
-async function filesInit() {
-  for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+async function filesInit({ hot = false } = {}) {
+  const loaded = {}
+  for (const file of commandFiles()) {
+    const key = commandKey(file)
     try {
-      const file = global.__filename(join(pluginFolder, filename))
-      const module = await import(file)
-      global.plugins[filename] = normalizePlugin(module.default || module)
-    } catch (e) {
-      conn.logger.error(`Error cargando plugin ${filename}:`, e)
-      delete global.plugins[filename]
+      const suffix = hot ? `?update=${Date.now()}` : ''
+      const module = await import(`${pathToFileURL(file).href}${suffix}`)
+      loaded[key] = normalizePlugin(module.default || module)
+    } catch (error) {
+      conn.logger.error(`Error cargando comando ${key}: ${format(error)}`)
     }
   }
+  global.plugins = Object.fromEntries(Object.entries(loaded).sort(([a], [b]) => a.localeCompare(b)))
+  conn.logger.info(`${Object.keys(global.plugins).length} comandos cargados desde commands/`)
 }
 await filesInit()
 
-global.reload = async (_ev, filename) => {
-  if (pluginFilter(filename)) {
-    const dir = global.__filename(join(pluginFolder, filename), true)
-    if (filename in global.plugins) {
-      if (existsSync(dir)) conn.logger.info(`Updated plugin - '${filename}'`)
-      else {
-        conn.logger.warn(`Deleted plugin - '${filename}'`)
-        return delete global.plugins[filename]
-      }
-    } else conn.logger.info(`New plugin - '${filename}'`)
-
-    const err = syntaxerror(readFileSync(dir), filename, {
-      sourceType: 'module',
-      allowAwaitOutsideFunction: true,
-    })
-    if (err) conn.logger.error(`Syntax error while loading '${filename}':\n${format(err)}`)
-    else {
-      try {
-        const module = await import(`${global.__filename(dir)}?update=${Date.now()}`)
-        global.plugins[filename] = normalizePlugin(module.default || module)
-      } catch (e) {
-        conn.logger.error(`Error requiring plugin '${filename}':\n${format(e)}`)
-      } finally {
-        global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)))
-      }
-    }
-  }
+let reloadTimer
+const reloadCommands = () => {
+  clearTimeout(reloadTimer)
+  reloadTimer = setTimeout(() => filesInit({ hot: true }).catch(console.error), 150)
 }
+for (const entry of readdirSync(commandFolder, { withFileTypes: true })) {
+  if (entry.isDirectory()) watch(join(commandFolder, entry.name), reloadCommands)
+}
+global.reload = reloadCommands
 Object.freeze(global.reload)
-
-watch(pluginFolder, global.reload)
 await global.reloadHandler()
 
 
@@ -530,7 +546,7 @@ global.reconnectSubBots = async function() {
       })
 
       
-      const serbotModule = await import('./plugins/serbot-serbot.js')
+      const serbotModule = await import('../../../commands/general/serbot-serbot.js')
       if (serbotModule.AYBot) {
         await serbotModule.AYBot({
           pathAYBot: botPath,
@@ -543,7 +559,7 @@ global.reconnectSubBots = async function() {
         })
         console.log(chalk.green(`Sub-bot ${folder} reconectado exitosamente`))
       } else {
-        console.log(chalk.red(`No se pudo importar Pain Bot para ${folder}`))
+        console.log(chalk.red(`No se pudo importar UNIVERSAL BOT para ${folder}`))
       }
 
      

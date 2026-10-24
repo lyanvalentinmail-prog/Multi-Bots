@@ -1,6 +1,6 @@
 # Universal MultiBot
 
-Arquitectura modular para ejecutar varios bots de WhatsApp de forma aislada. **Pain Bot** está integrado como `bot1`; `bot2` y `bot3` son plantillas deshabilitadas.
+Arquitectura modular para ejecutar **UNIVERSAL BOT**, una adaptación segura y organizada del motor de Pain Bot.
 
 > Pain Bot pertenece a sus autores originales (`nexusday/pain-bot`, Sunkovv) y se conserva bajo GPL-3.0-or-later. La copia adaptada está en `plugins/whatsapp/pain-bot`.
 
@@ -14,32 +14,55 @@ Arquitectura modular para ejecutar varios bots de WhatsApp de forma aislada. **P
 
 ```bash
 cp .env.example .env
-# Edita BOT1_OWNER_NUMBER con código de país, sin + ni espacios
+# Edita UNIVERSAL_BOT_OWNER_NUMBER con código de país, sin + ni espacios
 npm install
 npm start
 ```
 
-En la primera ejecución, Pain Bot solicitará el método de vinculación. La sesión queda aislada en `bots/bot1/session/` y la base de datos en `bots/bot1/database/database.json`; ambas rutas están ignoradas por Git.
+En la primera ejecución, UNIVERSAL BOT crea automáticamente `bots/universal-bot/database/database.json` desde el esquema completo `defaults.json` y solicita el método de vinculación. La sesión queda aislada en `bots/universal-bot/session/`; los datos privados y credenciales están ignorados por Git.
 
 ### Comandos de desarrollo
 
 ```bash
 npm start                 # inicia todos los bots habilitados
-npm run bot -- bot1       # fuerza el inicio de un bot concreto
+npm run bot -- universal-bot       # fuerza el inicio de un bot concreto
 npm test                  # pruebas unitarias
 npm run check             # sintaxis y pruebas
 npm run add:bot -- bot4   # crea una plantilla nueva
 ```
 
+## Terminal de Termux
+
+```bash
+bash termux.sh
+# Atajos:
+bash termux.sh --code 59899123456
+bash termux.sh --qr
+bash termux.sh --web
+```
+
+El menú instala dependencias, permite vincular UNIVERSAL BOT por Pairing Code o QR, abre el panel y ejecuta las pruebas.
+
+## Panel web
+
+```bash
+npm run web
+# abre http://localhost:3000
+```
+
+El panel responsive descubre `bots/*/bot.json`, muestra los 201 comandos declarados, permite crear una cuenta local y administra el runtime autorizado. Para Render se incluye `render.yaml`; la primera cuenta creada es propietaria del runtime. Las sesiones de WhatsApp no se guardan en la base del panel.
+
 ## Arquitectura
 
-- `bots/`: configuración, sesión, base e inicio aislados por instancia.
+- `bots/universal-bot/`: única instancia instalada, con `bot.json`, `commands.json`, configuración, menús, sesión, esquema completo de base de datos y arranque aislados.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
-- `commands/`: categorías para comandos nuevos y compartidos.
-- `plugins/whatsapp/pain-bot/`: código upstream adaptado. Sus plugins legacy permanecen allí para mantener compatibilidad.
+- `commands/`: los 201 comandos seguros están clasificados por categoría y son cargados recursivamente con recarga en caliente.
+- `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.
 - `terminal/`: presentación y utilidades de consola.
 - `lib/`: base de datos, permisos, validación, API y utilidades.
-- `scripts/`: instalación y administración de instancias.
+- `scripts/`: instalación, administración de instancias y servidor/API del panel.
+- `web/`: SPA/PWA responsive para catálogo, cuentas y runtime.
+- `docs/guides/`: guías de Termux y despliegue web.
 
 ## Añadir comandos nuevos
 
@@ -53,7 +76,7 @@ export const command = {
 }
 ```
 
-El cargador modular vive en `core/commandHandler.js`. Pain Bot conserva además sus comandos originales en `plugins/whatsapp/pain-bot/plugins/`.
+El cargador modular vive en `core/commandHandler.js`. El motor original está completo salvo los 14 comandos y módulos NSFW/+18 eliminados intencionalmente; quedan 201 comandos seguros. También se incluyen las 80 adivinanzas originales, el catálogo RPG de 92.919 personajes, OCR, fuentes y scripts de sincronización. Consulta `plugins/whatsapp/pain-bot/UPSTREAM.md` para el inventario de integración. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
 
 ## Seguridad
 

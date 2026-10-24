@@ -89,6 +89,7 @@ async function borrarMsgsDelUsuario(conn, chatId, userJid, keyExtra = null) {
 }
 
 const MARCAS_PAIN = [
+  /universal[\s_-]?bot/i,
   /pain[\s_-]?bot/i,
   /𝙥𝙖𝙞𝙣/i,
   /nexo community/i

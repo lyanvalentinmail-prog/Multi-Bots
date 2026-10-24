@@ -1,0 +1,36 @@
+# Render Blueprint: free web service + free PostgreSQL (temporary plan).
+# Free PostgreSQL instances expire after 30 days; export data before expiration.
+# The web runtime is process-capped and uses ephemeral storage only.
+#
+# Deployment is zero-config: the first account created in the panel becomes the
+# runtime owner and can deploy the bot with Pairing Code or QR right away.
+# Optional hardening:
+#   WEB_RUNTIME_ADMIN_EMAILS  -> comma-separated allowlist; replaces owner mode.
+#   WEB_RUNTIME_OWNER_EMAIL   -> pins the owner email instead of the first account.
+services:
+  - type: web
+    name: multibot-panel
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci
+    startCommand: npm run web
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: WEB_RUNTIME_ENABLED
+        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: multibot-db
+          property: connectionString
+
+databases:
+  - name: multibot-db
+    plan: free
+    region: oregon
+    databaseName: multibot
+    user: multibot
+    ipAllowList: []

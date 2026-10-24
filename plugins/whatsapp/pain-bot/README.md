@@ -1,4 +1,6 @@
-# Pain Bot
+# UNIVERSAL BOT
+
+Basado en el motor Pain Bot de Sunkovv; se mantienen sus créditos y licencia GPL-3.0-or-later.
 
 **By Sunkovv**
 

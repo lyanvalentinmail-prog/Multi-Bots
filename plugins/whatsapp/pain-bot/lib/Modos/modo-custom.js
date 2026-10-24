@@ -88,8 +88,6 @@ export async function manejarModoCustom(m, conn) {
   if (!esMensajeTextoPlano(m)) return false
   if (
     estaModoActivo('modoIA', m.chat) ||
-    estaModoActivo('modoHot', m.chat) ||
-    estaModoActivo('modoIlegal', m.chat) ||
     estaModoActivo('modoHuman', m.chat) ||
     estaModoActivo('modoSad', m.chat) ||
     estaModoActivo('modoPsico', m.chat)

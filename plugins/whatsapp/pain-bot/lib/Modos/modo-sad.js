@@ -42,8 +42,6 @@ export async function manejarModoSad(m, conn) {
   if (!esMensajeTextoPlano(m)) return false
   if (
     estaModoActivo('modoIA', m.chat) ||
-    estaModoActivo('modoHot', m.chat) ||
-    estaModoActivo('modoIlegal', m.chat) ||
     estaModoActivo('modoHuman', m.chat) ||
     estaModoActivo('modoPsico', m.chat) ||
     estaModoActivo('modoCustom', m.chat)

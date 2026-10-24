@@ -1,0 +1,1 @@
+export function parseMessage(text = '', prefixes = ['.']) { const prefix = prefixes.find(value => text.startsWith(value)); if (!prefix) return null; const [name = '', ...args] = text.slice(prefix.length).trim().split(/\s+/); return { prefix, name: name.toLowerCase(), args } }

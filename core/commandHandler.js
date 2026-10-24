@@ -1,0 +1,3 @@
+import { readdir } from 'node:fs/promises'; import path from 'node:path'; import { pathToFileURL } from 'node:url'
+export async function loadCommands(dir) { const commands = new Map(); async function walk(folder) { for (const item of await readdir(folder, { withFileTypes: true })) { const file = path.join(folder, item.name); if (item.isDirectory()) await walk(file); else if (item.name.endsWith('.js') && item.name !== '.gitkeep') { const mod = await import(pathToFileURL(file)); if (mod.command) commands.set(mod.command.name, mod.command) } } } await walk(dir); return commands }
+export async function runCommand(commands, name, context) { const command = commands.get(name); return command ? command.execute(context) : false }

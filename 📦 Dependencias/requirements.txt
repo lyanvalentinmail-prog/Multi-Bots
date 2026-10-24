@@ -1,0 +1,1 @@
+# El proyecto principal usa Node.js. Archivo reservado para futuras integraciones Python.

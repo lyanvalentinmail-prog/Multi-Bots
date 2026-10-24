@@ -1,0 +1,1 @@
+import './terminal/index.js'; import MultiBotManager from './core/multiBotManager.js'; const manager = new MultiBotManager(); const shutdown = () => manager.stopAll(); process.once('SIGINT', shutdown); process.once('SIGTERM', shutdown); await manager.startAll()

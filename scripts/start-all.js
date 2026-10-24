@@ -1,0 +1,1 @@
+import MultiBotManager from '../core/multiBotManager.js'; const manager = new MultiBotManager(); process.once('SIGINT', () => manager.stopAll()); process.once('SIGTERM', () => manager.stopAll()); await manager.startAll()

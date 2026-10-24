@@ -449,7 +449,7 @@ export async function resolverContextoMenu(m, conn, usedPrefix) {
   )
 
   let nombreBot = global.namebot || 'UNIVERSAL BOT'
-  let mainImg = './assets/bot1/menu.jpg'
+  let mainImg = './assets/universal-bot/menu.jpg'
   const botActual = cleanBotNum(conn.user?.jid || conn.user?.id)
   const esPrincipal = isMainBotConn(conn)
   const tipo = esPrincipal ? 'Principal Bot' : 'Sub Bot'
@@ -629,7 +629,6 @@ function construirCamposFlujoNativo(ctx, categorias) {
 
 function construirContextInfoInteractivo(sender) {
   return {
-    ...(global.rcanal?.contextInfo || {}),
     ...(sender ? { mentionedJid: [sender] } : {}),
   }
 }
@@ -649,12 +648,6 @@ ${ctx.rentalLine}
 
  𓂃 ࣪ ִֶָ☾. 𝙿𝚁𝙾𝙿𝙸𝙴𝚃𝙰𝚁𝙸𝙾𝚂𓂃 ࣪ ִֶָ☾.
 > 𓂃 ࣪ ִֶָ☾.  ⊹ wa.me/@Sunkovv ⊹ *Sunkovv*
-
- 𓂃 ࣪ ִֶָ☾. 𝙷𝙾𝚂𝚃𝙸𝙽𝙶 𝙾𝙵𝙸𝙲𝙸𝙰𝙻 𓂃 ࣪ ִֶָ☾.
-> 𓂃 ࣪ ִֶָ☾.  ⟅ https://nexcodea.com ⟆
-
- 𓂃 ࣪ ִֶָ☾. 𝙲𝙰𝙽𝙰𝙻𝙴𝚂 𝙾𝙵𝙸𝙲𝙸𝙰𝙻𝙴𝚂 𓂃 ࣪ ִֶָ☾.
-> 𓂃 ࣪ ִֶָ☾.  ⟅ https://whatsapp.com/channel/0029Vb7Y87RLikgEutyMId1h ⟆
 
 𓂃 ࣪ ִֶָ☾. *𝙴𝙻𝙸𝙶𝙴 𝚄𝙽𝙰 𝙲𝙰𝚃𝙴𝙶𝙾𝚁Í𝙰* 𓂃 ࣪ ִֶָ☾.`.trim()
 }

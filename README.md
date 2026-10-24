@@ -14,18 +14,18 @@ Arquitectura modular para ejecutar **UNIVERSAL BOT**, una adaptación segura y o
 
 ```bash
 cp .env.example .env
-# Edita BOT1_OWNER_NUMBER con código de país, sin + ni espacios
+# Edita UNIVERSAL_BOT_OWNER_NUMBER con código de país, sin + ni espacios
 npm install
 npm start
 ```
 
-En la primera ejecución, UNIVERSAL BOT solicitará el método de vinculación. La sesión queda aislada en `bots/bot1/session/` y la base de datos en `bots/bot1/database/database.json`; ambas rutas están ignoradas por Git.
+En la primera ejecución, UNIVERSAL BOT crea automáticamente `bots/universal-bot/database/database.json` desde el esquema completo `defaults.json` y solicita el método de vinculación. La sesión queda aislada en `bots/universal-bot/session/`; los datos privados y credenciales están ignorados por Git.
 
 ### Comandos de desarrollo
 
 ```bash
 npm start                 # inicia todos los bots habilitados
-npm run bot -- bot1       # fuerza el inicio de un bot concreto
+npm run bot -- universal-bot       # fuerza el inicio de un bot concreto
 npm test                  # pruebas unitarias
 npm run check             # sintaxis y pruebas
 npm run add:bot -- bot4   # crea una plantilla nueva
@@ -33,7 +33,7 @@ npm run add:bot -- bot4   # crea una plantilla nueva
 
 ## Arquitectura
 
-- `bots/bot1/`: única instancia instalada, publicada como **UNIVERSAL BOT**, con configuración, sesión y base aisladas.
+- `bots/universal-bot/`: única instancia instalada, con configuración, menús, sesión, esquema completo de base de datos y arranque aislados.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
 - `commands/`: los 201 comandos seguros están clasificados por categoría y son cargados recursivamente con recarga en caliente.
 - `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.

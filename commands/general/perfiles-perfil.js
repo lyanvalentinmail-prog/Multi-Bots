@@ -171,7 +171,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   const botNumber = conn.user?.jid?.split('@')[0].replace(/\D/g, '')
   const configPath = join('./Serbot', botNumber, 'config.json')
 
-  let imgBot = './assets/bot1/menu.jpg'
+  let imgBot = './assets/universal-bot/menu.jpg'
   let hasUserPP = false
 
   try {

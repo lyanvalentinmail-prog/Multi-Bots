@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 /** Config local del servidor: no se pierde al actualizar */
-const PRESERVAR_AL_ACTUALIZAR = ['bots/bot1/database/maxsubs.json', 'bots/bot1/session']
+const PRESERVAR_AL_ACTUALIZAR = ['bots/universal-bot/database/maxsubs.json', 'bots/universal-bot/session']
 
 function ejecutar(cmd) {
   return execSync(cmd, { encoding: 'utf-8', stdio: 'pipe' })

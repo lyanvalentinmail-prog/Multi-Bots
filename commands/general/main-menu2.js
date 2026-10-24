@@ -120,7 +120,6 @@ async function enviarRespuestaCategoria(conn, m, contexto, categorias, categoria
   if (!isInteractiveBaileysEnabled()) {
     await conn.sendFile(m.chat, categoria.img, 'menu-cat.jpg', leyenda, m, null, {
       contextInfo: {
-        ...rcanal.contextInfo,
         mentionedJid: [m.sender],
       },
     })
@@ -135,7 +134,6 @@ async function enviarRespuestaCategoria(conn, m, contexto, categorias, categoria
     console.error('Categoría interactiva falló:', errorInteractivo)
     await conn.sendFile(m.chat, categoria.img, 'menu-cat.jpg', leyenda, m, null, {
       contextInfo: {
-        ...rcanal.contextInfo,
         mentionedJid: [m.sender],
       },
     })
@@ -161,8 +159,7 @@ const handler = async (m, { conn, usedPrefix }) => {
       const texto = buildFullMenuText(m, contexto, categorias)
       await conn.sendFile(m.chat, contexto.mainImg, 'thumbnail.jpg', texto, m, null, {
         contextInfo: {
-          ...rcanal.contextInfo,
-          mentionedJid: [m.sender],
+            mentionedJid: [m.sender],
         },
       })
       return
@@ -175,8 +172,7 @@ const handler = async (m, { conn, usedPrefix }) => {
 
       await conn.sendFile(m.chat, contexto.mainImg, 'thumbnail.jpg', encabezado, m, null, {
         contextInfo: {
-          ...rcanal.contextInfo,
-          mentionedJid: [m.sender],
+            mentionedJid: [m.sender],
         },
       })
 
@@ -206,7 +202,6 @@ const handler = async (m, { conn, usedPrefix }) => {
     conn.sendMessage(m.chat, {
       text: 'Hubo un error al mostrar el menú.',
       contextInfo: {
-        ...rcanal.contextInfo,
       },
     }, { quoted: m })
     throw error

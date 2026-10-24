@@ -4,7 +4,7 @@ import os from 'os'
 import { getMenuRentalLine } from './alquiler.js'
 import { formatBotUptime } from './bot-uptime.js'
 import { findGroupParticipant, candidatosJidRemitente, jidsSeSolapan } from './group-participant.js'
-import { isMainBotConn, cleanBotNum } from '../plugins/modo-sub.js'
+import { isMainBotConn, cleanBotNum } from '../../../../commands/groups/modo-sub.js'
 import { getStaffOwnerIds } from './staff.js'
 import { construirBotonSoporte, obtenerLinkSoporte } from './soporte.js'
 
@@ -470,7 +470,7 @@ export async function resolverContextoMenu(m, conn, usedPrefix) {
   )
 
   let nombreBot = global.namebot || 'PAIN BOT'
-  let mainImg = './storage/img/menu3.jpg'
+  let mainImg = './assets/bot1/menu.jpg'
   const botActual = cleanBotNum(conn.user?.jid || conn.user?.id)
   const esPrincipal = isMainBotConn(conn)
   const tipo = esPrincipal ? 'Principal Bot' : 'Sub Bot'

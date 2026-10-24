@@ -35,8 +35,8 @@ npm run add:bot -- bot4   # crea una plantilla nueva
 
 - `bots/`: configuración, sesión, base e inicio aislados por instancia.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
-- `commands/`: categorías para comandos nuevos y compartidos.
-- `plugins/whatsapp/pain-bot/`: código upstream adaptado. Sus plugins legacy permanecen allí para mantener compatibilidad.
+- `commands/`: los 215 comandos están clasificados por categoría y son cargados recursivamente con recarga en caliente.
+- `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.
 - `terminal/`: presentación y utilidades de consola.
 - `lib/`: base de datos, permisos, validación, API y utilidades.
 - `scripts/`: instalación y administración de instancias.
@@ -53,7 +53,7 @@ export const command = {
 }
 ```
 
-El cargador modular vive en `core/commandHandler.js`. Pain Bot conserva además sus comandos originales en `plugins/whatsapp/pain-bot/plugins/`.
+El cargador modular vive en `core/commandHandler.js`. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
 
 ## Seguridad
 

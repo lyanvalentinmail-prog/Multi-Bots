@@ -3,7 +3,7 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const RUTA_CMD18 = join(__dirname, '../storage/cmd18.json')
+const RUTA_CMD18 = join(process.cwd(), 'database/cmd18.json')
 
 let cacheCmd18 = []
 let mtimeCmd18 = 0

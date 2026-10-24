@@ -1,0 +1,5 @@
+[
+  { "pregunta": "Tengo agujas y no sé coser, tengo números y no sé leer. ¿Qué soy?", "respuesta": "reloj", "categoria": "Objetos" },
+  { "pregunta": "Cuanto más le quitas, más grande se vuelve. ¿Qué es?", "respuesta": "agujero", "categoria": "Lógica" },
+  { "pregunta": "Tiene dientes y no come. ¿Qué es?", "respuesta": "peine", "categoria": "Objetos" }
+]

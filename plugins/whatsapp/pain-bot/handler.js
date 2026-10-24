@@ -19,7 +19,7 @@ import { isViewOnceCandidate, isKnownViewOnce, runAntiViewOnce } from './lib/vie
 import { checkGroupRental, isRentalBypassCommand } from './lib/alquiler.js'
 import { checkCmd18Command } from './lib/cmd18.js'
 import { findGroupParticipant, findBotParticipant, candidatosJidRemitente, jidsSeSolapan } from './lib/group-participant.js'
-import { shouldSkipGroupMessageEarly } from './plugins/modo-sub.js'
+import { shouldSkipGroupMessageEarly } from '../../../commands/groups/modo-sub.js'
 import { shouldBlockByGrupoOff } from './lib/bot-groups.js'
 import { sendMichiBoard } from './lib/michi-board.js'
 import { isInviteOpponent } from './lib/michi-users.js'
@@ -289,7 +289,7 @@ if (m.isGroup && !isRentalBypassCommand(m, this, isOwner, isROwner)) {
     console.error('Error processing muted list:', err)
   }
 
-const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')  
+const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../commands')  
 
 let usedPrefix = '.'  
 
@@ -329,7 +329,7 @@ for (let name in global.plugins) {
 const pluginsSesion = ['xnxx.js', 'hentai.js', 'xvideos.js']
 
 for (let plugin of pluginsProcesados) {
-  if (plugin.handler && typeof plugin.handler.before === 'function' && pluginsSesion.includes(plugin.name)) {
+  if (plugin.handler && typeof plugin.handler.before === 'function' && pluginsSesion.includes(path.basename(plugin.name))) {
     try {
       await plugin.handler.before.call(this, m, {
         conn: this,
@@ -598,7 +598,7 @@ if (m.text && !comandoEjecutado && global.db.data.adivinanzasActivas && global.d
         let modulo
         if (invitacion.type === 'miner') modulo = await import(`./lib/logic-miner.js`)
         else if (invitacion.type === 'bomba') modulo = await import(`./lib/logic-bomba.js`)
-        else modulo = await import(`./plugins/rpg-michi.js`)
+        else modulo = await import(`../../../commands/games/rpg-michi.js`)
         const { acceptInvite } = modulo
         return acceptInvite.call(this, m, this, invitacion, participants)
       } catch (e) {
@@ -609,7 +609,7 @@ if (m.text && !comandoEjecutado && global.db.data.adivinanzasActivas && global.d
         let modulo
         if (invitacion.type === 'miner') modulo = await import(`./lib/logic-miner.js`)
         else if (invitacion.type === 'bomba') modulo = await import(`./lib/logic-bomba.js`)
-        else modulo = await import(`./plugins/rpg-michi.js`)
+        else modulo = await import(`../../../commands/games/rpg-michi.js`)
         const { rejectInvite } = modulo
         return rejectInvite.call(this, m, this, invitacion)
       } catch (e) {
@@ -643,7 +643,7 @@ if (m.text && !comandoEjecutado && global.db.data.adivinanzasActivas && global.d
 
     try {
       
-      const { handleGameEnd } = await import(`./plugins/rpg-michi.js`)
+      const { handleGameEnd } = await import(`../../../commands/games/rpg-michi.js`)
 
       
       const resultado = game.makeMove(posicion, m.sender)

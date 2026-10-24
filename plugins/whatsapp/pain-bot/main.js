@@ -392,8 +392,23 @@ global.reloadHandler = async function (restartConn) {
   return true
 }
 
-const pluginFolder = join(__dirname, 'plugins')
+const commandFolder = join(__dirname, '../../../commands')
 const pluginFilter = (filename) => /\.js$/.test(filename)
+
+function commandFiles(folder = commandFolder) {
+  const files = []
+  for (const entry of readdirSync(folder, { withFileTypes: true })) {
+    if (entry.name.startsWith('.')) continue
+    const absolute = join(folder, entry.name)
+    if (entry.isDirectory()) files.push(...commandFiles(absolute))
+    else if (pluginFilter(entry.name)) files.push(absolute)
+  }
+  return files
+}
+
+function commandKey(file) {
+  return path.relative(commandFolder, file).split(path.sep).join('/')
+}
 
 function normalizePlugin(plugin) {
   if (typeof plugin === 'function') {
@@ -408,59 +423,39 @@ function normalizePlugin(plugin) {
       disabled: false,
     }
   }
-  if (plugin.command && typeof plugin.command === 'string') {
-    plugin.command = [plugin.command]
-  }
+  if (plugin.command && typeof plugin.command === 'string') plugin.command = [plugin.command]
   return plugin
 }
 
 global.plugins = {}
 
-async function filesInit() {
-  for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+async function filesInit({ hot = false } = {}) {
+  const loaded = {}
+  for (const file of commandFiles()) {
+    const key = commandKey(file)
     try {
-      const file = global.__filename(join(pluginFolder, filename))
-      const module = await import(file)
-      global.plugins[filename] = normalizePlugin(module.default || module)
-    } catch (e) {
-      conn.logger.error(`Error cargando plugin ${filename}:`, e)
-      delete global.plugins[filename]
+      const suffix = hot ? `?update=${Date.now()}` : ''
+      const module = await import(`${pathToFileURL(file).href}${suffix}`)
+      loaded[key] = normalizePlugin(module.default || module)
+    } catch (error) {
+      conn.logger.error(`Error cargando comando ${key}: ${format(error)}`)
     }
   }
+  global.plugins = Object.fromEntries(Object.entries(loaded).sort(([a], [b]) => a.localeCompare(b)))
+  conn.logger.info(`${Object.keys(global.plugins).length} comandos cargados desde commands/`)
 }
 await filesInit()
 
-global.reload = async (_ev, filename) => {
-  if (pluginFilter(filename)) {
-    const dir = global.__filename(join(pluginFolder, filename), true)
-    if (filename in global.plugins) {
-      if (existsSync(dir)) conn.logger.info(`Updated plugin - '${filename}'`)
-      else {
-        conn.logger.warn(`Deleted plugin - '${filename}'`)
-        return delete global.plugins[filename]
-      }
-    } else conn.logger.info(`New plugin - '${filename}'`)
-
-    const err = syntaxerror(readFileSync(dir), filename, {
-      sourceType: 'module',
-      allowAwaitOutsideFunction: true,
-    })
-    if (err) conn.logger.error(`Syntax error while loading '${filename}':\n${format(err)}`)
-    else {
-      try {
-        const module = await import(`${global.__filename(dir)}?update=${Date.now()}`)
-        global.plugins[filename] = normalizePlugin(module.default || module)
-      } catch (e) {
-        conn.logger.error(`Error requiring plugin '${filename}':\n${format(e)}`)
-      } finally {
-        global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)))
-      }
-    }
-  }
+let reloadTimer
+const reloadCommands = () => {
+  clearTimeout(reloadTimer)
+  reloadTimer = setTimeout(() => filesInit({ hot: true }).catch(console.error), 150)
 }
+for (const entry of readdirSync(commandFolder, { withFileTypes: true })) {
+  if (entry.isDirectory()) watch(join(commandFolder, entry.name), reloadCommands)
+}
+global.reload = reloadCommands
 Object.freeze(global.reload)
-
-watch(pluginFolder, global.reload)
 await global.reloadHandler()
 
 
@@ -530,7 +525,7 @@ global.reconnectSubBots = async function() {
       })
 
       
-      const serbotModule = await import('./plugins/serbot-serbot.js')
+      const serbotModule = await import('../../../commands/general/serbot-serbot.js')
       if (serbotModule.AYBot) {
         await serbotModule.AYBot({
           pathAYBot: botPath,

@@ -31,8 +31,6 @@ let handler = async (m, { conn, args, usedPrefix, command, isAdmin }) => {
 
     if (accion === 'on') {
       if (isModeActive('modoIA', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗜𝗔', 'modoia')
-      if (isModeActive('modoHot', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗛𝗼𝘁', 'modohot')
-      if (isModeActive('modoIlegal', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗶𝗹𝗲𝗴𝗮𝗹', 'modoilegal')
       if (isModeActive('modoSad', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗦𝗮𝗱', 'modosad')
       if (isModeActive('modoPsico', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗣𝘀𝗶𝗰𝗼', 'modospico')
       if (isModeActive('modoCustom', m.chat)) return avisarModoActivo('𝗠𝗼𝗱𝗼 𝗽𝗲𝗿𝘀𝗼𝗻𝗮𝗹𝗶𝘇𝗮𝗱𝗼', 'modo')

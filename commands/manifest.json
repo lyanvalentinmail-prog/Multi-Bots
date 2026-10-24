@@ -1,5 +1,5 @@
 {
-  "total": 215,
+  "total": 201,
   "categories": {
     "ai": [
       "ia-anime.js",
@@ -9,16 +9,6 @@
       "ia-ocr.js",
       "ia-replia.js",
       "modo-ia.js"
-    ],
-    "anime": [
-      "hentai.js",
-      "waifu-corean.js",
-      "waifu-girls.js",
-      "waifu-nsfw.js",
-      "waifu-tetas.js",
-      "waifu-tik18.js",
-      "waifu.js",
-      "waifu2.js"
     ],
     "audio": [
       "audio-slow.js",
@@ -42,9 +32,7 @@
       "download-pinterest.js",
       "download-spotify.js",
       "tiktok-2.js",
-      "tiktok-search.js",
-      "xnxx.js",
-      "xvideos.js"
+      "tiktok-search.js"
     ],
     "economy": [
       "economia-coins.js",
@@ -108,18 +96,14 @@
       "rpg-work.js"
     ],
     "general": [
-      "cmd18-toggle.js",
       "google-search.js",
       "info-grupo.js",
       "main-menu2.js",
       "modo-custom.js",
       "modo-descargas.js",
-      "modo-hot.js",
       "modo-human.js",
-      "modo-ilegal.js",
       "modo-psico.js",
       "modo-sad.js",
-      "onlyfans-info.js",
       "perfiles-allbirths.js",
       "perfiles-birthdays.js",
       "perfiles-delbirth.js",

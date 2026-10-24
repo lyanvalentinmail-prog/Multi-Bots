@@ -98,8 +98,6 @@ ${cmd(p, 'antiprefijo on/off')}
 ${cmd(p, 'soloadmin on/off')}
 ${cmd(p, 'welcome on/off')}
 ${cmd(p, 'modoia on/off')}
-${cmd(p, 'modohot on/off')}
-${cmd(p, 'modoilegal on/off')}
 ${cmd(p, 'modohuman on/off')}
 ${cmd(p, 'modosad on/off')}
 ${cmd(p, 'modospico on/off')}
@@ -108,7 +106,7 @@ ${cmd(p, 'modo nombre|prompt|ban,del,mute,warn,delwarn')}
 ${cmd(p, 'modo nombre|prompt|all')}
 ${cmd(p, 'modo off')}
 ${cmd(p, 'mododescargas on/off')}
-${cmd(p, 'cmd18 on/off')}`.trim()
+`.trim()
 }
 
 function seccionSubBot(p) {
@@ -189,7 +187,6 @@ ${cmd(p, 'tiktok <búsqueda/link>')}
 ${cmd(p, 'tiktok2 <búsqueda/link>')}
 ${cmd(p, 'scsearch <búsqueda>')}
 ${cmd(p, 'ly <canción>')}
-${cmd(p, 'onlyfans <username>')}
 ${cmd(p, 'imagen <busqueda>')}
 ${cmd(p, 'wall <busqueda>')}
 ${cmd(p, 'pinterest <busqueda>')}
@@ -304,30 +301,13 @@ ${cmd(p, 'meme')}
 ${cmd(p, 'snake')}`.trim()
 }
 
-function seccionNsfw(p) {
-  return `${encabezadoSeccion('𝙽𝚂𝙵𝚆')}
-${cmd(p, 'cmd18 on/off')}
-${cmd(p, 'waifu')}
-${cmd(p, 'waifu2')}
-${cmd(p, 'neko')}
-${cmd(p, 'corean')}
-${cmd(p, 'tik18')}
-${cmd(p, 'tetas')}
-${cmd(p, 'girls')}
-${cmd(p, 'xnxx <url>')}
-${cmd(p, 'xnxx <búsqueda>')}
-${cmd(p, 'hentai <url>')}
-${cmd(p, 'hentai <búsqueda>')}
-${cmd(p, 'xvideos <url>')}
-${cmd(p, 'xvideos <búsqueda>')}`.trim()
-}
 
 const GRUPOS_CATEGORIA = [
   { title: grupoSelector('𝚂𝚃𝙰𝙵𝙵'), ids: ['owners', 'admins'] },
   { title: grupoSelector('𝚁𝙿𝙶'), ids: ['juegos', 'perfil', 'top'] },
   { title: grupoSelector('𝚄𝚃𝙸𝙻𝙸𝙳𝙰𝙳𝙴𝚂'), ids: ['busquedas', 'osint', 'ia', 'descargas'] },
   { title: grupoSelector('𝙼𝙴𝙳𝙸𝙰'), ids: ['reacciones', 'stickers', 'adicionales'] },
-  { title: grupoSelector('𝙴𝚇𝚃𝚁𝙰𝚂'), ids: ['subbot', 'diversion', 'nsfw'] },
+  { title: grupoSelector('𝙴𝚇𝚃𝚁𝙰𝚂'), ids: ['subbot', 'diversion'] },
 ]
 
 const DEFS_CATEGORIA = [
@@ -345,7 +325,6 @@ const DEFS_CATEGORIA = [
   { id: 'adicionales', label: '𝙰𝙳𝙸𝙲𝙸𝙾𝙽𝙰𝙻𝙴𝚂', hint: 'notas · tts · pdf', roles: ['all'], body: seccionAdicionales },
   { id: 'stickers', label: '𝚂𝚃𝙸𝙲𝙺𝙴𝚁𝚂', hint: 'crear · editar', roles: ['all'], body: seccionStickers },
   { id: 'diversion', label: '𝙳𝙸𝚅𝙴𝚁𝚂𝙸𝙾𝙽', hint: 'tops · memes', roles: ['all'], body: seccionDiversion },
-  { id: 'nsfw', label: '𝙽𝚂𝙵𝚆', hint: '+18 · cmd18', roles: ['all'], body: seccionNsfw },
 ]
 
 export function obtenerIdCategoriaMenu(rowId) {
@@ -745,7 +724,6 @@ const CLAVES_COINCIDENCIA_CATEGORIA = {
   adicionales: ['ADICIONAL', '𝙰𝙳𝙸𝙲𝙸𝙾𝙽𝙰𝙻'],
   stickers: ['STICKER', '𝚂𝚃𝙸𝙲𝙺𝙴𝚁'],
   diversion: ['DIVERSION', '𝙳𝙸𝚅𝙴𝚁𝚂𝙸𝙾𝙽'],
-  nsfw: ['NSFW', '𝙽𝚂𝙵𝚆'],
 }
 
 export function buscarCategoriaMenuDesdeMensaje(m, categorias) {

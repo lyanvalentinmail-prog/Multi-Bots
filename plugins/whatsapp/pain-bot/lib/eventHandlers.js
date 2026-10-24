@@ -4,8 +4,6 @@
  */
 
 import { manejarModoIA } from './Modos/modo-ia.js'
-import { manejarModoHot } from './Modos/modo-hot.js'
-import { manejarModoIlegal } from './Modos/modo-ilegal.js'
 import { manejarModoHumano } from './Modos/modo-human.js'
 import { manejarModoSad } from './Modos/modo-sad.js'
 import { manejarModoPsico } from './Modos/modo-psico.js'
@@ -30,9 +28,7 @@ export async function manejarModosIA(m, conn) {
     manejarModoSad(m, conn),
     manejarModoPsico(m, conn),
     manejarModoCustom(m, conn),
-    manejarModoIA(m, conn),
-    manejarModoHot(m, conn),
-    manejarModoIlegal(m, conn)
+    manejarModoIA(m, conn)
   ])
 
  

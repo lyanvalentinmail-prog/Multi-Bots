@@ -35,7 +35,7 @@ npm run add:bot -- bot4   # crea una plantilla nueva
 
 - `bots/`: configuración, sesión, base e inicio aislados por instancia.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
-- `commands/`: los 215 comandos están clasificados por categoría y son cargados recursivamente con recarga en caliente.
+- `commands/`: los 201 comandos seguros están clasificados por categoría y son cargados recursivamente con recarga en caliente.
 - `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.
 - `terminal/`: presentación y utilidades de consola.
 - `lib/`: base de datos, permisos, validación, API y utilidades.

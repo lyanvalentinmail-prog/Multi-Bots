@@ -12,7 +12,6 @@ export async function manejarModoIA(m, conn) {
   if (!m.isGroup || !estaModoActivo('modoIA', m.chat) || m.fromMe) return false
   if (!esMensajeTextoPlano(m)) return false
   if (estaModoActivo('modoHuman', m.chat) || estaModoActivo('modoSad', m.chat) || estaModoActivo('modoPsico', m.chat) || estaModoActivo('modoCustom', m.chat)) return false
-  if (estaModoActivo('modoHot', m.chat) || estaModoActivo('modoIlegal', m.chat)) return false
 
   const texto = m.text.trim()
   if (texto.length < 3) return false

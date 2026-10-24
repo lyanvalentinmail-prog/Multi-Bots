@@ -42,8 +42,6 @@ export async function manejarModoPsico(m, conn) {
   if (!esMensajeTextoPlano(m)) return false
   if (
     estaModoActivo('modoIA', m.chat) ||
-    estaModoActivo('modoHot', m.chat) ||
-    estaModoActivo('modoIlegal', m.chat) ||
     estaModoActivo('modoHuman', m.chat) ||
     estaModoActivo('modoSad', m.chat) ||
     estaModoActivo('modoCustom', m.chat)

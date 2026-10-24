@@ -1,5 +1,5 @@
 import { fork } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import appConfig from '../config/config.js'
@@ -23,7 +23,13 @@ export class MultiBotManager {
     return child
   }
   restartAfterFailure(id, config) { const count = (this.restarts.get(id) || 0) + 1; this.restarts.set(id, count); if (count <= config.maxRestarts) setTimeout(() => this.start(id), config.restartDelay) }
-  async startAll() { for (const id of ['bot1', 'bot2', 'bot3']) await this.start(id) }
+  async startAll() {
+    const botIds = readdirSync(appConfig.botsDir, { withFileTypes: true })
+      .filter(entry => entry.isDirectory() && existsSync(path.join(appConfig.botsDir, entry.name, 'config', 'bot.js')))
+      .map(entry => entry.name)
+      .sort()
+    for (const id of botIds) await this.start(id)
+  }
   stop(id) { const child = this.processes.get(id); if (child) child.kill('SIGTERM') }
   stopAll() { this.stopping = true; for (const id of this.processes.keys()) this.stop(id) }
 }

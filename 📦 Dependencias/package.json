@@ -1,7 +1,7 @@
 {
   "name": "universal-multibot",
   "version": "1.0.0",
-  "description": "Gestor modular de múltiples bots de WhatsApp con Pain Bot integrado",
+  "description": "UNIVERSAL BOT para WhatsApp, basado en el motor Pain Bot y organizado de forma modular",
   "main": "index.js",
   "type": "module",
   "directories": {

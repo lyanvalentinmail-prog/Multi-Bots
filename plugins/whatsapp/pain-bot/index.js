@@ -1,4 +1,4 @@
-console.log('⧉ Inicializando Pain...')
+console.log('⧉ Inicializando UNIVERSAL BOT...')
 
 import { join, dirname } from 'path'
 import { createRequire } from 'module'
@@ -12,7 +12,7 @@ import cfonts from 'cfonts'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const require = createRequire(__dirname)
 
-cfonts.say('PAIN\nBOT', {
+cfonts.say('UNIVERSAL\nBOT', {
   font: 'block',
   align: 'center',
   gradient: ['cyan', 'blue']

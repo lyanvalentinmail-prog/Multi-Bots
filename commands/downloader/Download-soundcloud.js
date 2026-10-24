@@ -59,7 +59,7 @@ async function apiJson(rutaConConsulta) {
   const respuesta = await fetch(url, {
     headers: {
       Accept: 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) PainBot/1.0'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) UniversalBot/1.0'
     }
   })
   const crudo = await respuesta.text()
@@ -115,7 +115,7 @@ async function descargarPista(scUrl) {
 
 async function obtenerBufer(url) {
   const respuesta = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) PainBot/1.0' }
+    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) UniversalBot/1.0' }
   })
   if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`)
   return Buffer.from(await respuesta.arrayBuffer())

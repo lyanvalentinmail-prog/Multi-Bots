@@ -58,7 +58,7 @@ async function buscarUnaVez(consulta) {
   const respuesta = await fetch(urlBusqueda, {
     headers: {
       Accept: 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) PainBot/1.0'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) UniversalBot/1.0'
     }
   })
   const crudo = await respuesta.text()

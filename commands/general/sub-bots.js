@@ -72,7 +72,7 @@ let handler = async (m, { conn }) => {
       }
     }
 
-    let nombreBot = global.namebot || 'PAIN BOT'
+    let nombreBot = global.namebot || 'UNIVERSAL BOT'
     if (fs.existsSync(rutaConfig)) {
       try {
         const configuracion = JSON.parse(fs.readFileSync(rutaConfig, 'utf-8'))

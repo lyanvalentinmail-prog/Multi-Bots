@@ -38,7 +38,7 @@ let handler = async (m, { conn, usedPrefix }) => {
   const rutaConfig = join(DIR_RAIZ, 'Serbot', botActual, 'config.json')
   const esPrincipal = isMainBotConn(conn)
 
-  let nombreBot = global.namebot || 'PAIN BOT'
+  let nombreBot = global.namebot || 'UNIVERSAL BOT'
   let imgBot = resolverImagenBot(rutaConfig)
 
   if (!esPrincipal && fs.existsSync(rutaConfig)) {

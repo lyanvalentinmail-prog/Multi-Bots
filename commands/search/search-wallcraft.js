@@ -44,7 +44,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text?.trim()) {
       return conn.sendMessage(m.chat, {
-        text: `ִֶָ☾. Ingresa qué wallpaper buscar.\n\n> *Ejemplo:*\n${usedPrefix + command} pain`,
+        text: `ִֶָ☾. Ingresa qué wallpaper buscar.\n\n> *Ejemplo:*\n${usedPrefix + command} naturaleza`,
         contextInfo: { ...rcanal?.contextInfo }
       }, { quoted: m })
     }

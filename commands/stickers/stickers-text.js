@@ -212,7 +212,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
     if (!texto) {
       return conn.sendMessage(m.chat, {
-        text: `*[❗] Escribe el texto del sticker animado o respondé a un mensaje.*\n\nEjemplos:\n> ${usedPrefix + command} Hola\n> ${usedPrefix + command} Pain Bot oficial\n> ${usedPrefix + command} línea uno\\nlínea dos\n> (respondé un mensaje con ${usedPrefix + command})`,
+        text: `*[❗] Escribe el texto del sticker animado o respondé a un mensaje.*\n\nEjemplos:\n> ${usedPrefix + command} Hola\n> ${usedPrefix + command} UNIVERSAL BOT oficial\n> ${usedPrefix + command} línea uno\\nlínea dos\n> (respondé un mensaje con ${usedPrefix + command})`,
         contextInfo: { ...rcanal.contextInfo }
       }, { quoted: m })
     }

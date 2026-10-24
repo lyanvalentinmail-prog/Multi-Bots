@@ -15,7 +15,7 @@ async function traducirAlEspanol(text) {
 let handler = async (m, { conn, text, args, usedPrefix, command }) => {
   if (!text) {
     return conn.sendMessage(m.chat, {
-      text: `BÚSQUEDA \n\n*Uso:* ${usedPrefix}google <búsqueda>\n*Ejemplo:* ${usedPrefix}google Pain\n*Ejemplo:* ${usedPrefix}google anime\n`,
+      text: `BÚSQUEDA \n\n*Uso:* ${usedPrefix}google <búsqueda>\n*Ejemplo:* ${usedPrefix}google Universal Bot\n*Ejemplo:* ${usedPrefix}google anime\n`,
       contextInfo: {
         ...rcanal.contextInfo
       }

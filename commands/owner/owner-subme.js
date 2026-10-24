@@ -38,7 +38,7 @@ let handler = async (m, { conn, usedPrefix, command, args, text, isOwner }) => {
 
 
 
-> PAIN COMMUNITY`
+> UNIVERSAL BOT`
 
     
     let conteoEnviados = 0
@@ -75,7 +75,7 @@ let handler = async (m, { conn, usedPrefix, command, args, text, isOwner }) => {
 
 
 
-> PAIN COMMUNITY`
+> UNIVERSAL BOT`
 
     await conn.sendMessage(m.chat, {
       text: mensajeConfirmacion,

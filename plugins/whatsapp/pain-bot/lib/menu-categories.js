@@ -448,7 +448,7 @@ export async function resolverContextoMenu(m, conn, usedPrefix) {
     '.',
   )
 
-  let nombreBot = global.namebot || 'PAIN BOT'
+  let nombreBot = global.namebot || 'UNIVERSAL BOT'
   let mainImg = './assets/bot1/menu.jpg'
   const botActual = cleanBotNum(conn.user?.jid || conn.user?.id)
   const esPrincipal = isMainBotConn(conn)

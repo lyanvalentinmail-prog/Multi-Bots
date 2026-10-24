@@ -535,7 +535,7 @@ global.reconnectSubBots = async function() {
         })
         console.log(chalk.green(`Sub-bot ${folder} reconectado exitosamente`))
       } else {
-        console.log(chalk.red(`No se pudo importar Pain Bot para ${folder}`))
+        console.log(chalk.red(`No se pudo importar UNIVERSAL BOT para ${folder}`))
       }
 
      

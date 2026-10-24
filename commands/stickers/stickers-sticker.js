@@ -53,7 +53,7 @@ export default handler
 export function resolverMetaSticker(m, conn) {
   const usuario = global.db?.data?.users?.[m.sender] || {}
   const nombreUsuario = m.pushName || conn?.getName?.(m.sender) || 'Usuario'
-  const nombreBot = global.namebot || 'PAIN BOT'
+  const nombreBot = global.namebot || 'UNIVERSAL BOT'
 
   const packPorDefecto = `👑 𝗢𝘄𝗻𝗲𝗿𝘀: \n✰ Sunkovv`
   const autorPorDefecto = `\n\n🪐 𝗕𝗼𝘁:\n↳${nombreBot}\n\n🍁 𝑼𝒔𝒖𝒂𝒓𝒊𝒐:\n↳@${nombreUsuario}`

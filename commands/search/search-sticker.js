@@ -37,7 +37,7 @@ const handler = async (m, { conn, text, args }) => {
 
         const webp = await toWebp(bufer)
         const nombrePack = `${consulta}`
-        const autor = `${nombreUsuario}` + '\n' + (global.namebot || 'PAIN BOT')
+        const autor = `${nombreUsuario}` + '\n' + (global.namebot || 'UNIVERSAL BOT')
         const stickerFinal = await addExif(webp, nombrePack, autor)
         const animado = isAnimatedWebP(stickerFinal)
 

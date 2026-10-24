@@ -1,6 +1,6 @@
 # Universal MultiBot
 
-Arquitectura modular para ejecutar varios bots de WhatsApp de forma aislada. **Pain Bot** está integrado como `bot1`; `bot2` y `bot3` son plantillas deshabilitadas.
+Arquitectura modular para ejecutar **UNIVERSAL BOT**, una adaptación segura y organizada del motor de Pain Bot.
 
 > Pain Bot pertenece a sus autores originales (`nexusday/pain-bot`, Sunkovv) y se conserva bajo GPL-3.0-or-later. La copia adaptada está en `plugins/whatsapp/pain-bot`.
 
@@ -19,7 +19,7 @@ npm install
 npm start
 ```
 
-En la primera ejecución, Pain Bot solicitará el método de vinculación. La sesión queda aislada en `bots/bot1/session/` y la base de datos en `bots/bot1/database/database.json`; ambas rutas están ignoradas por Git.
+En la primera ejecución, UNIVERSAL BOT solicitará el método de vinculación. La sesión queda aislada en `bots/bot1/session/` y la base de datos en `bots/bot1/database/database.json`; ambas rutas están ignoradas por Git.
 
 ### Comandos de desarrollo
 
@@ -33,7 +33,7 @@ npm run add:bot -- bot4   # crea una plantilla nueva
 
 ## Arquitectura
 
-- `bots/`: configuración, sesión, base e inicio aislados por instancia.
+- `bots/bot1/`: única instancia instalada, publicada como **UNIVERSAL BOT**, con configuración, sesión y base aisladas.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
 - `commands/`: los 201 comandos seguros están clasificados por categoría y son cargados recursivamente con recarga en caliente.
 - `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.
@@ -53,7 +53,7 @@ export const command = {
 }
 ```
 
-El cargador modular vive en `core/commandHandler.js`. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
+El cargador modular vive en `core/commandHandler.js`. El motor original está completo salvo los 14 comandos y módulos NSFW/+18 eliminados intencionalmente; quedan 201 comandos seguros. Los comandos adaptados de Pain Bot viven únicamente en `commands/`; `commands/manifest.json` mantiene el inventario por categoría.
 
 ## Seguridad
 

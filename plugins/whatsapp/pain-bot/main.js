@@ -44,6 +44,13 @@ const {
 } = await import('@whiskeysockets/baileys')
 
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
+const webRuntime = process.env.MULTIBOT_WEB_RUNTIME === '1'
+const runtimeLoginMethod = process.env.MULTIBOT_LOGIN_METHOD === 'pairing-code' ? 'code' : 'qr'
+const emitRuntimeEvent = (type, value) => {
+  if (!webRuntime) return
+  const event = value === undefined ? { type } : { type, value }
+  process.stdout.write(`MULTIBOT_RUNTIME_EVENT:${JSON.stringify(event)}\n`)
+}
 
 protoType()
 serialize()
@@ -193,7 +200,7 @@ async function handleLogin() {
     return
   }
 
-  let loginMethod = await question(
+  let loginMethod = webRuntime ? runtimeLoginMethod : await question(
     chalk.green(
       '¿Cómo deseas iniciar sesión?\nEscribe "qr" para escanear el código QR o "code" para usar un código de 8 dígitos:\n'
     )
@@ -202,7 +209,9 @@ async function handleLogin() {
   loginMethod = loginMethod.toLowerCase().trim()
 
   if (loginMethod === 'code') {
-    let phoneNumber = await question(chalk.blue('Ingresa el número de WhatsApp donde estará el bot (incluye código país, ej: 521XXXXXXXXXX):\n'))
+    let phoneNumber = webRuntime
+      ? process.env.MULTIBOT_LOGIN_PHONE || ''
+      : await question(chalk.blue('Ingresa el número de WhatsApp donde estará el bot (incluye código país, ej: 521XXXXXXXXXX):\n'))
     phoneNumber = phoneNumber.replace(/\D/g, '').replace(/^0+/, '')
 
     // México: WhatsApp usa 521. Si ya trae 521, no volver a insertar el 1.
@@ -215,13 +224,24 @@ async function handleLogin() {
     if (typeof conn.requestPairingCode === 'function') {
       try {
         
-        if (conn.ws.readyState === ws.OPEN) {
-          let code = await conn.requestPairingCode(phoneNumber)
-          code = code?.match(/.{1,4}/g)?.join('-') || code
-          console.log(chalk.cyan('Tu código de emparejamiento es:', code))
-        } else {
-          console.log(chalk.red('La conexión no está abierta. Intenta nuevamente.'))
+        if (conn.ws.readyState !== ws.OPEN) {
+          await new Promise((resolve, reject) => {
+            const startedAt = Date.now()
+            const timer = setInterval(() => {
+              if (conn.ws.readyState === ws.OPEN) {
+                clearInterval(timer)
+                resolve()
+              } else if (Date.now() - startedAt >= 20000) {
+                clearInterval(timer)
+                reject(new Error('Tiempo agotado esperando WhatsApp.'))
+              }
+            }, 200)
+          })
         }
+        let code = await conn.requestPairingCode(phoneNumber)
+        code = code?.match(/.{1,4}/g)?.join('-') || code
+        if (webRuntime) emitRuntimeEvent('pairing-code', code)
+        else console.log(chalk.cyan('Tu código de emparejamiento es:', code))
       } catch (e) {
         console.log(chalk.red('Error al solicitar código de emparejamiento:'), e.message || e)
       }
@@ -231,7 +251,9 @@ async function handleLogin() {
   } else {
     console.log(chalk.yellow('Generando código QR, escanéalo con tu WhatsApp...'))
     conn.ev.on('connection.update', ({ qr }) => {
-      if (qr) qrcode.generate(qr, { small: true })
+      if (!qr) return
+      if (webRuntime) emitRuntimeEvent('qr', qr)
+      else qrcode.generate(qr, { small: true })
     })
   }
 }
@@ -269,6 +291,7 @@ async function connectionUpdate(update) {
   if (global.db.data == null) await loadDatabase()
   if (connection === 'open') {
     console.log(chalk.yellow('Conectado correctamente.'))
+    emitRuntimeEvent('connected')
     global.mainBotJid = sock.user?.jid?.split('@')[0] || sock.user?.id?.split('@')[0]
     try {
       const { markBotStart } = await import('./lib/bot-uptime.js')
@@ -294,6 +317,7 @@ async function connectionUpdate(update) {
     process.send('reset')
   }
   if (connection === 'close') {
+    emitRuntimeEvent('disconnected')
     switch (reason) {
       case DisconnectReason.badSession:
         sock.logger.error(`Sesión incorrecta, elimina la carpeta ${global.authFile} y escanea nuevamente.`)

@@ -1,20 +1,21 @@
-const ownerNumber = process.env.UNIVERSAL_BOT_OWNER_NUMBER || ''
+const env = (name, fallback = '') => process.env[`BOT_UNIVERSAL_BOT_${name}`] ?? process.env[`UNIVERSAL_BOT_${name}`] ?? fallback
+const ownerNumber = env('OWNER_NUMBER')
 export const botConfig = {
-  id: 'universal-bot', name: 'UNIVERSAL BOT', enabled: process.env.UNIVERSAL_BOT_ENABLED !== 'false',
-  adapter: 'pain-bot', prefix: process.env.UNIVERSAL_BOT_PREFIX || '.', ownerNumber,
+  id: 'universal-bot', name: 'UNIVERSAL BOT', enabled: env('ENABLED', 'true') !== 'false',
+  adapter: 'pain-bot', prefix: env('PREFIX', '.'), ownerNumber,
   autorestart: true, maxRestarts: 5, restartDelay: 5000
 }
 // Compatibility globals consumed by UNIVERSAL BOT.
-global.owner = ownerNumber ? [[ownerNumber, process.env.UNIVERSAL_BOT_OWNER_NAME || 'Owner', true]] : []
+global.owner = ownerNumber ? [[ownerNumber, env('OWNER_NAME', 'Owner'), true]] : []
 global.ownerLid = []
 global.sessions = process.env.BOT_SESSION_DIR || 'bots/universal-bot/session'
 global.bot = 'UniversalMultiBot'
 global.AFBots = true
 global.packname = 'UNIVERSAL BOT'
 global.namebot = botConfig.name
-global.author = process.env.UNIVERSAL_BOT_AUTHOR || 'Sunkovv / Universal MultiBot'
-global.moneda = process.env.UNIVERSAL_BOT_CURRENCY || 'USD'
-global.canal = process.env.UNIVERSAL_BOT_CHANNEL || ''
+global.author = env('AUTHOR', 'Sunkovv / Universal MultiBot')
+global.moneda = env('CURRENCY', 'USD')
+global.canal = env('CHANNEL')
 global.ch = { ch1: '' }
 global.logssubbots = ''
 global.baileysInteractive = true

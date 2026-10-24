@@ -1,0 +1,57 @@
+{
+  "description": "Categorías oficiales de comandos compartidos.",
+  "categories": [
+    {
+      "id": "ai",
+      "count": 7
+    },
+    {
+      "id": "audio",
+      "count": 6
+    },
+    {
+      "id": "downloader",
+      "count": 14
+    },
+    {
+      "id": "economy",
+      "count": 2
+    },
+    {
+      "id": "fun",
+      "count": 26
+    },
+    {
+      "id": "games",
+      "count": 27
+    },
+    {
+      "id": "general",
+      "count": 23
+    },
+    {
+      "id": "groups",
+      "count": 43
+    },
+    {
+      "id": "images",
+      "count": 10
+    },
+    {
+      "id": "owner",
+      "count": 17
+    },
+    {
+      "id": "search",
+      "count": 5
+    },
+    {
+      "id": "stickers",
+      "count": 10
+    },
+    {
+      "id": "tools",
+      "count": 11
+    }
+  ]
+}

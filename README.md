@@ -31,15 +31,38 @@ npm run check             # sintaxis y pruebas
 npm run add:bot -- bot4   # crea una plantilla nueva
 ```
 
+## Terminal de Termux
+
+```bash
+bash termux.sh
+# Atajos:
+bash termux.sh --code 59899123456
+bash termux.sh --qr
+bash termux.sh --web
+```
+
+El menú instala dependencias, permite vincular UNIVERSAL BOT por Pairing Code o QR, abre el panel y ejecuta las pruebas.
+
+## Panel web
+
+```bash
+npm run web
+# abre http://localhost:3000
+```
+
+El panel responsive descubre `bots/*/bot.json`, muestra los 201 comandos declarados, permite crear una cuenta local y administra el runtime autorizado. Para Render se incluye `render.yaml`; la primera cuenta creada es propietaria del runtime. Las sesiones de WhatsApp no se guardan en la base del panel.
+
 ## Arquitectura
 
-- `bots/universal-bot/`: única instancia instalada, con configuración, menús, sesión, esquema completo de base de datos y arranque aislados.
+- `bots/universal-bot/`: única instancia instalada, con `bot.json`, `commands.json`, configuración, menús, sesión, esquema completo de base de datos y arranque aislados.
 - `core/`: ciclo de vida, comandos, mensajes, menús y eventos.
 - `commands/`: los 201 comandos seguros están clasificados por categoría y son cargados recursivamente con recarga en caliente.
 - `plugins/whatsapp/pain-bot/`: motor y librerías adaptadas de Pain Bot; los comandos ya no están duplicados aquí.
 - `terminal/`: presentación y utilidades de consola.
 - `lib/`: base de datos, permisos, validación, API y utilidades.
-- `scripts/`: instalación y administración de instancias.
+- `scripts/`: instalación, administración de instancias y servidor/API del panel.
+- `web/`: SPA/PWA responsive para catálogo, cuentas y runtime.
+- `docs/guides/`: guías de Termux y despliegue web.
 
 ## Añadir comandos nuevos
 

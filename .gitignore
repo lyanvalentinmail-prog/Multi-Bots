@@ -10,3 +10,6 @@ plugins/whatsapp/pain-bot/sessions/
 plugins/whatsapp/pain-bot/storage/
 tmp/
 !bots/*/database/defaults.json
+data/*.json
+!data/.gitkeep
+bots/*/tmp/
